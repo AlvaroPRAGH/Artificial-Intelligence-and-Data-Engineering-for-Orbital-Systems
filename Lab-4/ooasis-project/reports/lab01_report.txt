@@ -1,0 +1,64 @@
+.:
+
+--DESCRIPTION OF DATASET STRUCTURE--
+data
+experiments
+reports
+results
+src
+
+./data:
+processed
+raw
+
+./data/processed:
+final.csv
+observations_clean.csv
+tmp.csv
+
+./data/raw:
+observations.csv
+
+./experiments:
+
+./reports:
+lab01_report.txt
+
+./results:
+
+./src:
+
+features
+inference
+ingestion
+models
+monitoring
+preprocessing
+
+./src/features:
+
+./src/inference:
+
+./src/ingestion:
+load_data.py
+
+./src/models:
+
+./src/monitoring:
+
+./src/preprocessing:
+
+
+--IDENTIFICATION OF OBSERVED OBJECTS--
+timestamp,object_id,temperature,velocity
+2026-03-01T12:00:00,OBJ-001,15.3,7.4
+2026-03-01T12:05:00,OBJ-002,14.9,7.2
+2026-03-01T12:10:00,OBJ-003,15.1,7.5
+2026-03-01T12:15:00,OBJ-001,15.4,7.6
+
+--SUMMARY OF DETECTED DATA ISSUES--
+2026-03-01T12:20:00,OBJ-004,INVALID,7.8
+
+--DESCRIPTION OF CLEANING STEPS---
+We take the raw data and with the command grep -v INVALID data/raw/observations.csv we take 
+all the data is not INVALID and put it in data/processed/observations_clean.csv to
