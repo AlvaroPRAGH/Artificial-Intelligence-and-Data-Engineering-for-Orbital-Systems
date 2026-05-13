@@ -1,0 +1,23 @@
+FINE-TUNING ANALYSIS REPORT
+===========================
+
+1. Did fine-tuning improve accuracy?
+No. The overall accuracy remained exactly the same. Both models correctly classified 34 out of 36 images in the test set (approximately 94.4% accuracy). 
+
+2. Did training become slower?
+Yes. Training a fine-tuned model is slower because the optimizer must compute gradients and update the weights for both the final classifier and the entire `layer4` block of the ResNet18 architecture. The frozen model, on the other hand, only updates the final linear layer. (Nota: Añade los segundos exactos que te salieron en la terminal si quieres ser más preciso).
+
+3. Did the confusion matrix change?
+Yes. Although the total number of errors remained the same (2 errors in total in both matrices), the distribution of those errors shifted between the classes.
+
+4. Did any class improve more than others?
+Yes, the `residential` class improved. In the frozen transfer learning model, 1 residential image was confused with a river. In the fine-tuned model, the `residential` class reached perfect accuracy (12 out of 12).
+
+5. Did any class become worse?
+Yes, the `river` class became slightly worse. The frozen model classified all 12 rivers perfectly, but the fine-tuned model misclassified 1 river image as residential. The `forest` class remained identical in both models (11 correct, 1 misclassified as river).
+
+6. Is fine-tuning worth the additional computational cost?
+In this specific scenario, no. Since the overall accuracy did not improve and the errors merely shifted from one class to another, the additional training time and the increased complexity required for fine-tuning do not provide a tangible engineering benefit.
+
+7. Would you use the frozen model or the fine-tuned model in a small-data satellite classification problem?
+I would use the frozen model. For small datasets, fine-tuning increases the risk of overfitting. Since the frozen model achieved the same accuracy with less computational effort and lower risk of overfitting by relying on general, well-established visual features, it is the safer and more efficient choice for a limited dataset.
