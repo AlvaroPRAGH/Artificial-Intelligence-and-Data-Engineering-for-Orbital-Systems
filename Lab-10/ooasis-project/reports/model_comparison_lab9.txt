@@ -1,0 +1,49 @@
+MODEL COMPARISON
+================
+
+1. SimpleCNN from scratch
+Accuracy: 0.6944
+Training time: 
+Comments: This model started with random weights and had to learn basic visual patterns (edges, textures) from scratch using a very small dataset. Its quality is heavily limited by the available training data, making it highly prone to overfitting.
+
+2. ResNet18 frozen feature extractor
+Accuracy: 0.9444
+Training time: 11.05 seconds
+Comments: This was the fastest model to train because it only updated 1,539 parameters corresponding to the new final classifier layer. It efficiently reused general visual knowledge pretrained on ImageNet, achieving a very high accuracy (94.4%) with minimal computational effort.
+
+3. ResNet18 fine-tuned last block
+Accuracy: 1.0000
+Training time: 14.66 seconds
+Comments: By unfreezing the 'layer4' block, the model updated 8,395,267 parameters. This gave it the flexibility to adapt its high-level features specifically to satellite imagery, achieving perfect accuracy (100%) on the test set, though it increased the training time by about 3.6 seconds.
+
+------------------------------------------------------
+BEST ACCURACY: ResNet18 fine-tuned last block (1.0000)
+FASTEST TRAINING: ResNet18 frozen feature extractor (11.05 seconds)
+BEST ENGINEERING TRADE-OFF: ResNet18 fine-tuned last block. 
+(Justification: Although the training was a few seconds slower and updated significantly more parameters, it managed to achieve 100% accuracy. The time penalty—from 11s to 14s—is negligible compared to the absolute benefit in accuracy for this specific case).
+
+Engineering Questions
+---------------------
+* Which model achieved the best accuracy? 
+ResNet18 with fine-tuning (100% accuracy).
+
+* Which model trained fastest? 
+ResNet18 with the frozen feature extractor (11.05 seconds).
+
+* Which model required the least implementation effort? 
+ResNet18 with the frozen feature extractor, as it does not require unfreezing specific blocks (layer4) or applying conditional filters in the optimizer.
+
+* Which model is most suitable for a small dataset? 
+Typically, the frozen Transfer Learning model. It prevents overfitting because it has very few trainable parameters. Training a CNN from scratch with limited data usually fails or overfits heavily (as seen with the 69.4% accuracy of the SimpleCNN).
+
+* Which model is most suitable for a real operational system? 
+It depends on the risk/benefit balance, but generally ResNet18 (either frozen or fine-tuned) because it is reliable, fast to adapt, and leverages visual features robustly learned from massive datasets.
+
+* When would you train a CNN from scratch? 
+Only when you have a massive, proprietary dataset and the visual patterns are so unique that a model pretrained on standard photos (like ImageNet) would not provide a significant advantage.
+
+* When would you use transfer learning? 
+Almost always as a first option: to build rapid prototypes, when labeled data is scarce, or when computational resources are limited.
+
+* When would you fine-tune a pretrained model? 
+When the frozen model's accuracy plateaus and you need the deeper layers to adapt to the specific characteristics of your new domain (just like it happened here, jumping from 94.4% to 100%).

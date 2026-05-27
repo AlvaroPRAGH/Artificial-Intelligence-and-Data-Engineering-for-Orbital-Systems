@@ -1,0 +1,20 @@
+CAM Methods Comparison
+======================
+
+- Do all CAM methods highlight the same image regions?
+No. They usually agree on the main subject (like the river), but the exact shapes, intensity, and spread of the heatmaps are quite different across methods.
+
+- Which method produces the sharpest visualization?
+LayerCAM produces the sharpest and most detailed heatmaps, capturing finer edges and smaller features.
+
+- Which method produces the smoothest visualization?
+GradCAM is definitely the smoothest and most blurred out of the four.
+
+- Which method appears easiest to interpret?
+GradCAM is the easiest for a quick general glance, but LayerCAM is better if you want to understand exactly which specific pixels influenced the decision.
+
+- Do any methods produce suspicious or unexpected attention?
+Yes, sometimes methods like EigenCAM highlight random background textures or edges that don't seem related to the actual class we are looking for.
+
+- What does this suggest about relying on only one XAI method?
+It proves that relying on just one method is risky. Each algorithm calculates attention differently and has its own blind spots. Using multiple methods gives a much more honest and complete view of the model's real behavior.

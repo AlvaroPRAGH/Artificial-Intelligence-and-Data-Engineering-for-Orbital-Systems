@@ -1,0 +1,18 @@
+UNKNOWN INPUT ANALYSIS REPORT
+=============================
+
+1. Does the transfer model also force a known class prediction?
+Yes. Just like the SimpleCNN from Laboratory 8, the ResNet18 transfer learning model is a closed-set classifier. It is mathematically constrained by its final layer to assign every input to one of the three trained classes (forest, residential, or river), regardless of whether the input is a highway, another land cover, or just sensor noise.
+
+2. Does it give high confidence on unknown input?
+Yes. It is a common vulnerability in deep neural networks (including powerful pretrained models like ResNet18) to output highly overconfident predictions (often >90%) for completely unrelated or out-of-distribution (OOD) images. The softmax activation function forces the output probabilities to sum to 1, which frequently pushes one class to a high confidence value even if the input features don't actually match the class.
+
+3. Is transfer learning enough to solve out-of-distribution detection?
+No. Transfer learning significantly improves feature extraction and classification accuracy for the target classes because it reuses general visual knowledge. However, it does not inherently give the model the ability to detect anomalies or "know what it doesn't know." It cannot safely identify out-of-distribution samples on its own.
+
+4. What additional mechanism would be needed in an operational system?
+To prevent false interpretations or incorrect autonomous decisions in a real operational Earth Observation system, additional safety mechanisms are necessary. These could include:
+- Dedicated Out-of-Distribution (OOD) detection algorithms.
+- Uncertainty estimation techniques (such as Monte Carlo Dropout, ensembles, or Bayesian Neural Networks).
+- Training an explicit "Unknown" or "Background" class using negative examples and diverse unrelated images.
+- Implementing strict confidence thresholding (rejecting predictions below a certain confidence level, although this alone is often insufficient due to overconfidence).
