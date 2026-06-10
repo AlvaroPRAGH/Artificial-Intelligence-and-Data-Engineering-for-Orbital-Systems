@@ -1,0 +1,23 @@
+SEGMENTATION ANALYSIS
+=======================
+
+Pixel accuracy:
+0.9000
+
+Visual observations:
+The model successfully reconstructs the overall layout of the scene. Large continuous regions like the background terrain and the vegetation ellipse are clearly defined, and the vertical river strip is correctly identified. However, the edges of the shapes appear slightly pixelated or simplified compared to the clean geometric boundaries of the ground truth.
+
+Most accurate class:
+Background and Water. These classes cover large, homogeneous, and visually distinct continuous areas in the synthetic images, making it highly straightforward for the encoder to extract their prominent spatial features.
+
+Most difficult class:
+Urban. The urban blocks consist of small, fragmented, and isolated 12x12 squares. Because the network downsamples the spatial resolution twice through MaxPool2d layers, fine-grained details of these small structures suffer from spatial loss before reaching the bottleneck.
+
+Boundary errors:
+Minor boundary bleeding is visible. The transitions between the vegetation ellipse and the gray background show slight misalignment. This occurs because regular convolutional layers tend to smooth out sharp edges, causing localized pixel classification errors exactly at the class intersections.
+
+Small object errors:
+Some small urban blocks either have their sharp corners rounded off or disappear entirely from the prediction mask if they overlap too closely with noise or other boundaries. The spatial compression in the U-Net encoder makes it harder to perfectly reconstruct objects that span only a few pixels.
+
+Engineering conclusions:
+The developed U-Net pipeline functions correctly as a proof of concept, achieving a solid 90% pixel accuracy on the test subset. However, global pixel accuracy is heavily biased toward the dominant classes (background and water). In a real operational Earth Observation system, using a simple synthetic dataset with flat colors and geometric shapes would fail to generalize. Real satellite imagery introduces complex textures, seasonal illumination shifts, sensor degradation, and mixed-pixel ambiguities at boundaries. To handle real-world deployment, the pipeline would require multispectral band integration, a deeper architecture with attention gates, and data augmentation to prevent overfitting.

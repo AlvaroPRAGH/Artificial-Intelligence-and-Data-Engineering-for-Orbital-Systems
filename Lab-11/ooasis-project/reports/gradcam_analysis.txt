@@ -1,0 +1,45 @@
+GRAD-CAM ANALYSIS
+=================
+
+Experiment 1: Forest
+Prediction: forest
+Confidence: 0.9498
+Observed attention: The heatmap focuses on a large red patch on the center-left and another on the bottom-right. It highlights general areas rather than sharp edges.
+Interpretation: It makes sense. Since there are no clear geometric shapes like in a city, the model relies on the general texture of the trees. This shows it actually learned the right visual patterns instead of random noise.
+
+Experiment 2: Residential
+Prediction: river
+Confidence: 0.6982
+Observed attention: There is a strong red spot on the middle-left side and some yellow areas on the edges. The center is completely blue, so the model ignored it.
+Interpretation: The model seems to focus on specific clusters of buildings or dense textures in those hotspots. It ignores the middle part, probably because the typical "residential" patterns are clearer in the highlighted areas.
+
+Experiment 3: Highway
+Prediction: river
+Confidence: 0.6247
+Observed attention: The model completely ignores the actual highway, which is marked in blue. Instead, the red hotspots are focused on the empty fields on the left side (top and bottom).
+Interpretation: This is a great example of suspicious behavior. Since the model was never trained to recognize highways, it doesn't know what it's looking at. It ignores the obvious road and focuses on the background dirt/grass, trying to force a guess using the classes it actually knows.
+
+Experiment 4: Noise
+Prediction: river
+Confidence: 0.5077
+Observed attention: The heatmap highlights completely random areas, like a big red spot in the top right and some yellow on the left. It's just reacting to random pixel clusters.
+Interpretation: The model is basically hallucinating. Since it's forced to output a prediction, it tries to find a known pattern in pure noise. This proves that a model will always try to guess something, which is why we can't blindly trust it if the input data is garbage.
+
+Final Conclusions:
+
+Final Conclusions:
+
+- Did the model focus on meaningful regions? 
+Yes, for the classes it already knew (like the forest and residential areas), it focused on the actual textures and structures that define those classes.
+
+- Did Grad-CAM help explain predictions? 
+Absolutely. It showed us exactly what the model was "looking at" to make its decision, instead of just giving us a black-box percentage.
+
+- Did unknown inputs produce suspicious behavior? 
+Yes. With the highway and the noise image, the model ignored the main subjects and focused on random background details or pixel clusters to force a prediction.
+
+- Can explainability guarantee correctness? 
+No. Grad-CAM only tells us *why* the model made a decision, not if the decision is actually right. A model can be very confident but completely wrong (like hallucinating on noise).
+
+- Why is XAI important in operational Earth Observation systems? 
+Because in critical systems (like satellite navigation or hazard detection), a wrong prediction can be dangerous. XAI helps engineers catch when the model is relying on bad data, noise, or biases before trusting its decisions.

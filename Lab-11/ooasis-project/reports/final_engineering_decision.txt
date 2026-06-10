@@ -1,0 +1,35 @@
+FINAL ENGINEERING DECISION REPORT
+====================================
+
+SELECTED MODEL: ResNet18 with fine-tuning (last block unfrozen)
+
+1. TECHNICAL JUSTIFICATION
+--------------------------
+Based on the experiments conducted in Laboratory 8 and Laboratory 9, the ResNet18 model with fine-tuning is the superior choice for this Earth Observation prototype.
+
+* Classification Accuracy: This model achieved a perfect accuracy of 1.0000 on the test set, significantly outperforming the SimpleCNN (0.6944) and the frozen ResNet18 (0.9444).
+* Training Time: Although the training time (14.66 seconds) was slightly longer than the frozen model (11.05 seconds), the 3.6-second difference is negligible compared to the 5.5% increase in accuracy.
+* Implementation Complexity: Fine-tuning requires slightly more effort to configure (unfreezing layer4 and adjusting the optimizer), but it provides the flexibility needed for the model to adapt its high-level feature extraction to the specific patterns of satellite imagery (rivers, forest textures, and residential layouts).
+* Suitability for Small Datasets: While training from scratch with only 144 samples led to poor performance, the fine-tuned model successfully leveraged pretrained visual knowledge from ImageNet to avoid major overfitting while specializing in the EuroSAT domain.
+
+2. EXPECTED ADVANTAGES
+----------------------
+* Superior Feature Extraction: The model captures both general visual patterns (edges, colors) and domain-specific textures (land-cover shapes).
+* Reliable Classification: The 100% accuracy on the test set demonstrates high internal consistency for the known classes (forest, residential, river).
+* Faster Convergence: Unlike starting from scratch, the model reaches low loss values within just a few epochs.
+
+3. POSSIBLE RISKS
+-----------------
+* Overfitting: There is an inherent risk of the model "memorizing" the small training set of 144 images, which might decrease performance on completely new geographic regions.
+* Closed-set Limitation: The model will still force a prediction even if the input is an unknown class (e.g., highway or sensor noise), which poses a reliability risk in autonomous missions.
+* Preprocessing Dependency: The model is highly sensitive to input normalization; failing to apply ImageNet mean/std values during deployment will lead to degraded performance.
+
+4. DEPLOYMENT CONSIDERATIONS
+----------------------------
+* Hardware: The model is lightweight enough to run on CPU for inference (as demonstrated during the lab), but GPU acceleration is recommended for retraining or processing large satellite swaths.
+* Calibration: Deployment pipelines must include resizing to 224x224 and the specific ImageNet normalization transform.
+* Operational Reliability: For a real-world system, this model should be augmented with an Out-of-Distribution (OOD) detection mechanism to handle unknown terrain types safely.
+
+CONCLUSION
+----------
+ResNet18 with fine-tuning represents the best engineering trade-off between implementation effort, computational cost, and classification performance. It provides a robust foundation for a satellite image analysis system where labeled data is scarce but high precision is mandatory.

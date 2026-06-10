@@ -1,0 +1,19 @@
+DATASET DIFFICULTY ANALYSIS
+===========================
+
+Original Pixel Accuracy: 0.9000
+New Pixel Accuracy: [Inserta aquí tu nueva precisión, por ejemplo: 0.8425]
+
+Questions Analysis:
+------------------
+1. Did pixel accuracy decrease?
+Yes, the global pixel accuracy decreased. Making the spatial structures smaller directly limits the capacity of our Small U-Net to correctly map every pixel, forcing higher mathematical penalties during CrossEntropyLoss evaluation.
+
+2. Which class became harder?
+The Urban (class 3) and Water (class 2) classes became significantly harder. Because their representative widths and areas were cut down drastically, they now occupy a microscopic percentage of the total image, increasing false negative classifications.
+
+3. Did small structures become more difficult?
+Yes, small structures became immensely more difficult. Due to the two MaxPool2d pooling layers in the U-Net encoder, an initial 6x6 pixel urban block is compressed down to an intermediate feature map representation that is smaller than a single pixel before reaching the bottleneck. Without massive localized feature representation, the decoder cannot accurately reconstruct their precise spatial coordinates.
+
+4. What does this suggest about real Earth Observation data?
+This confirms that in operational Earth Observation systems, spatial resolution and object scale are critical challenges. Real-world target structures like thin roads, small buildings, or narrow drainage streams require specialized high-resolution network configurations. Relying solely on global pixel accuracy is deeply misleading for monitoring rare or highly fragmented classes, since a model can maintain an apparently high score by simply predicting the large, uniform background terrain accurately while completely missing vital small-scale details.

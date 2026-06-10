@@ -1,0 +1,20 @@
+Occlusion vs Grad-CAM Analysis
+==============================
+
+- Do both methods highlight similar regions?
+Yes, they both generally point to the river, but not in the exact same way or shape.
+
+- Which explanation appears more localized?
+The occlusion sensitivity map. Grad-CAM tends to create larger, blurry blobs, while occlusion marks more exact and bounded patches.
+
+- Which explanation appears easier to interpret?
+Visually, Grad-CAM is more intuitive and quicker to read at a glance because it's smoother. However, the logic behind occlusion ("if I cover this, the model fails") is much easier to justify.
+
+- Did both methods identify the river region?
+Yes, both methods ignored the background vegetation and focused on the actual water to make the decision.
+
+- What happens for unknown inputs?
+The results lose their meaning. Grad-CAM tries to force heatmaps onto background noise (like with the highway), and occlusion gives random maps because hiding a patch of an image the model already doesn't understand doesn't cause logical confidence drops.
+
+- Can one explanation method completely replace another?
+No. As the theory says, they answer different questions. Grad-CAM tells you "where the model is looking," and Occlusion tells you "what parts are strictly necessary so it doesn't change its mind." They complement each other perfectly.
